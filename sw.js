@@ -1,5 +1,5 @@
 // Offline support. Bump VERSION whenever any file changes, so phones pick up the update.
-const VERSION = 'ruchulu-v2';
+const VERSION = 'ruchulu-v3';
 const FILES = [
   './', 'index.html', 'recipes.js', 'art.js', 'fonts.css', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',

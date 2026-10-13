@@ -36,9 +36,8 @@ button{cursor:pointer}
 
 /* Screens stack on top of each other and slide like a native app. */
 #stage{position:fixed;inset:0;overflow:hidden;background:var(--leaf)}
-.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);will-change:transform}
-.screen.anim{transition:transform .32s cubic-bezier(.2,.8,.2,1),filter .32s}
-.screen.under{filter:brightness(.82)}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;background:var(--bg)}
+.screen.anim{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
 @media (prefers-reduced-motion:reduce){.screen.anim{transition:none}}
 
 /* ---------- Home ---------- */
@@ -70,9 +69,9 @@ button{cursor:pointer}
 
 /* ---------- App bar ---------- */
 .bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:6px;height:calc(var(--safe-t) + 58px);padding:calc(var(--safe-t) + 6px) 12px 8px 4px;
-  background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:background .2s}
+  background:var(--bg);box-shadow:0 1px 0 var(--line)}
 .bar.overlay{margin-bottom:calc(-1 * (var(--safe-t) + 58px))}
-.bar.on-color{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;color:#fff}
+.bar.on-color{background:transparent;box-shadow:none;color:#fff}
 .bar.on-color.dk{color:#3a2a12}
 .back{display:flex;align-items:center;gap:2px;border:0;background:none;padding:8px 10px 8px 6px;font-size:1.02rem;font-weight:600;color:var(--leaf);border-radius:12px}
 @media (prefers-color-scheme:dark){.back{color:var(--gold)}}
@@ -105,7 +104,7 @@ button{cursor:pointer}
 .search.has .clear{display:block}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .tile{position:relative;overflow:hidden;border:0;border-radius:26px;aspect-ratio:1/1.08;padding:16px;text-align:left;background:var(--c);color:#fff;
-  display:flex;flex-direction:column;box-shadow:0 8px 22px color-mix(in srgb,var(--c) 35%,transparent)}
+  display:flex;flex-direction:column}
 .tile:first-child{grid-column:span 2;aspect-ratio:2.1/1}
 .tile:active{transform:scale(.97)}
 .tile .art{position:absolute;right:-18%;bottom:-20%;width:78%;pointer-events:none}
@@ -341,8 +340,16 @@ function parent(route) {
   return null;
 }
 const stage = document.getElementById('stage');
-const stack = [];                         // screens currently in the DOM (normally 1)
-const curScreen = () => stack[stack.length - 1];
+let current = null;                       // the screen on show
+let animTimer = null;                     // set while a slide is running
+const curScreen = () => current;
+// Finish any slide still running: leave only the current screen (and `keep`, if given) in place.
+function settle(keep) {
+  if (animTimer) { clearTimeout(animTimer); animTimer = null; }
+  [...stage.children].forEach(c => { if ((!current || c !== current.el) && c !== keep) c.remove(); });
+  if (current) { current.el.classList.remove('anim'); current.el.style.transform = ''; }
+  if (keep) keep.classList.remove('anim');
+}
 function makeScreen(route) {
   const el = document.createElement('div');
   el.className = 'screen'; el.innerHTML = view(route);
@@ -367,34 +374,34 @@ function wire(s) {
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function transition(next, dir, fromX) {
   document.querySelectorAll('.viewer').forEach(v => v.remove());
-  const cur = curScreen();
+  const keepUnder = next.el.parentNode === stage ? next.el : null;   // the page revealed by a swipe
+  settle(keepUnder);
+  const cur = current;
   if (cur) scrollMem[cur.route] = cur.el.scrollTop;
-  if (dir === 'back' && scrollMem[next.route] != null) requestAnimationFrame(() => { next.el.scrollTop = scrollMem[next.route]; });
   if (dir === 'fwd') delete scrollMem[next.route];
+  const restore = () => { if (dir === 'back' && scrollMem[next.route] != null) next.el.scrollTop = scrollMem[next.route]; };
   if (!cur || dir === 'none' || reduce) {
-    stage.innerHTML = ''; stack.length = 0; stage.appendChild(next.el); stack.push(next);
-    if (dir === 'back' && scrollMem[next.route] != null) next.el.scrollTop = scrollMem[next.route];
+    [...stage.children].forEach(c => { if (c !== next.el) c.remove(); });
+    if (!next.el.parentNode) stage.appendChild(next.el);
+    next.el.style.transform = ''; current = next; restore();
     return;
   }
   const W = stage.clientWidth;
   if (dir === 'fwd') {
     next.el.style.transform = `translateX(${W}px)`; stage.appendChild(next.el);
     next.el.getBoundingClientRect();
-    next.el.classList.add('anim'); cur.el.classList.add('anim', 'under');
+    next.el.classList.add('anim'); cur.el.classList.add('anim');
     next.el.style.transform = 'translateX(0)'; cur.el.style.transform = `translateX(${-W * .28}px)`;
   } else {
-    if (!next.el.parentNode) { next.el.style.transform = `translateX(${-W * .28}px)`; next.el.classList.add('under'); stage.insertBefore(next.el, cur.el); }
+    if (!keepUnder) { next.el.style.transform = `translateX(${-W * .28}px)`; stage.insertBefore(next.el, cur.el); }
+    restore();
     if (fromX != null) cur.el.style.transform = `translateX(${fromX}px)`;
     next.el.getBoundingClientRect();
     next.el.classList.add('anim'); cur.el.classList.add('anim');
-    next.el.classList.remove('under'); next.el.style.transform = 'translateX(0)'; cur.el.style.transform = `translateX(${W}px)`;
+    next.el.style.transform = 'translateX(0)'; cur.el.style.transform = `translateX(${W}px)`;
   }
-  stack.push(next);
-  setTimeout(() => {
-    [...stage.children].forEach(c => { if (c !== next.el) c.remove(); });
-    stack.length = 0; stack.push(next);
-    next.el.classList.remove('anim', 'under'); next.el.style.transform = '';
-  }, 340);
+  current = next;
+  animTimer = setTimeout(() => { animTimer = null; settle(); }, 320);
 }
 // Every page change goes into the browser history, so the phone's own Back works too.
 let idx = 0, ourBack = false, pending = null;
@@ -435,12 +442,13 @@ addEventListener('popstate', e => {
     const t = e.touches[0];
     if (!standalone && t.clientX < 24) return;           // in Safari the screen edge belongs to Safari's own back swipe
     if (e.target.closest && e.target.closest('input, [data-noswipe]')) return;
-    if (!curScreen() || parent(curScreen().route) === null) return;
+    if (animTimer || !curScreen() || parent(curScreen().route) === null) return;
     x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); dragging = false;
   }, { passive: true });
   document.addEventListener('touchmove', e => {
     if (x0 === null) return;
     const t = e.touches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+    if (dragging && curScreen() !== cur) { x0 = null; dragging = false; return; }
     if (!dragging) {
       if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { x0 = null; return; }
       if (dx < 12) return;
@@ -456,7 +464,6 @@ addEventListener('popstate', e => {
     if (!reduce) {
       cur.el.style.transform = `translateX(${x}px)`;
       under.el.style.transform = `translateX(${-W * .28 * (1 - x / W)}px)`;
-      under.el.style.filter = `brightness(${.82 + .18 * x / W})`;
     }
   }, { passive: false });
   document.addEventListener('touchend', e => {
@@ -467,7 +474,6 @@ addEventListener('popstate', e => {
     dragging = false;
     const commit = dx > W * .33 || (dx > 50 && dx / dt > .5);
     if (reduce) { if (commit) goBack(); return; }
-    under.el.style.filter = '';
     if (commit) { goBack(dx, under); }
     else {
       cur.el.classList.add('anim'); under.el.classList.add('anim');
