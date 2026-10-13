@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>రుచులు · Ruchulu</title>
+<meta name="description" content="ఘుమఘుమలాడే మా ఇంటి వంటలు — recipes from our kitchen notebook">
+<meta name="theme-color" content="#fbf6ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17140f" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="రుచులు">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  --paper:#fbf6ea; --paper-2:#f4ecd8; --ink:#24357a; --ink-soft:rgba(36,53,122,.13); --margin:#d4655a;
+  --text:#2a2118; --text-2:#6b5a45; --text-3:#9a8566;
+  --turmeric:#d4930f; --chilli:#b8322a; --leaf:#4b7a3e; --tamarind:#7a4528; --jowar:#b58a4a;
+  --rule:34px;
+  --te:'Noto Serif Telugu','Noto Sans Telugu',serif; --en:'Crimson Text',Georgia,serif; --hand:'Ruchulu Hand Telugu','Caveat',cursive;
+  --ui:'Ruchulu UI Telugu',-apple-system,system-ui,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#17140f; --paper-2:#211c15; --ink:#a9b8ff; --ink-soft:rgba(169,184,255,.10); --margin:#b0544b;
+  --text:#efe6d6; --text-2:#c8b89c; --text-3:#97866b;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--ui)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;min-height:100vh;position:relative;
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--rule) - 1px),var(--ink-soft) calc(var(--rule) - 1px),var(--ink-soft) var(--rule));
+  background-position:0 6px}
+.wrap:before{content:'';position:absolute;top:0;bottom:0;left:76px;border-left:1.5px solid var(--margin);opacity:.55;pointer-events:none}
+.view{padding:calc(14px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom)) 90px;position:relative}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-left:-74px;min-height:var(--rule)}
+.langs{display:flex;gap:2px;background:var(--paper-2);border-radius:999px;padding:3px}
+.langs button{border:none;background:none;border-radius:999px;padding:4px 10px;font-size:.78rem;color:var(--text-2);cursor:pointer}
+.langs button.on{background:var(--ink);color:var(--paper)}
+.back{border:none;background:none;color:var(--ink);font-weight:600;cursor:pointer;padding:4px 0;font-size:.95rem}
+
+/* Index */
+.mark{margin:22px 0 0;font-family:var(--te);font-weight:800;font-size:3.4rem;line-height:1.1;color:var(--ink);letter-spacing:.01em}
+.sub-te{font-family:var(--te);font-size:1.12rem;color:var(--text-2);line-height:var(--rule);margin:6px 0 0}
+.sub{font-family:var(--hand),var(--te);font-size:1.45rem;color:var(--text-2);line-height:var(--rule);margin:2px 0 8px}
+.search{display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--ink);margin:6px 0 14px;height:var(--rule)}
+.search input{flex:1;border:none;background:transparent;font-size:1rem;outline:none;padding:0}
+.search input::placeholder{color:var(--text-3)}
+.cats{display:flex;gap:6px;overflow-x:auto;margin:0 0 6px -74px;padding:0 0 6px 74px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex-shrink:0;border:1.5px solid var(--c,var(--ink));color:var(--c,var(--ink));background:transparent;border-radius:999px;padding:5px 12px;font-size:.88rem;cursor:pointer;font-family:var(--ui)}
+.cat.on{background:var(--c,var(--ink));color:var(--paper)}
+.cat small{opacity:.7;margin-left:3px}
+.group{margin-top:14px}
+.group h2{margin:0;font-family:var(--te);font-size:1.25rem;line-height:var(--rule);color:var(--c)}
+.group h2 small{font-family:var(--en);font-weight:400;font-size:1rem;color:var(--text-3);margin-left:8px}
+.entry{position:relative;display:block;width:100%;text-align:left;border:none;background:none;cursor:pointer;padding:0;margin:0;min-height:var(--rule)}
+.entry .star{position:absolute;left:-52px;top:0;width:28px;text-align:center;font-size:1.05rem;line-height:var(--rule);color:var(--c)}
+.entry .t{font-family:var(--te);font-size:1.18rem;line-height:var(--rule)}
+.entry .e{font-family:var(--en);font-size:1.05rem;color:var(--text-2);line-height:var(--rule);margin-left:8px}
+.entry .meta{float:right;font-size:.74rem;color:var(--text-3);line-height:var(--rule)}
+.entry:active .t{color:var(--ink)}
+.empty{font-family:var(--hand);font-size:1.4rem;color:var(--text-2);line-height:var(--rule)}
+
+/* Recipe page */
+.rtitle{margin:20px 0 0;font-family:var(--te);font-weight:800;font-size:2.3rem;line-height:1.2;color:var(--ink)}
+.rtitle-en{font-family:var(--en);font-size:1.35rem;color:var(--text-2);line-height:var(--rule)}
+.tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-height:var(--rule)}
+.tag{font-size:.75rem;border-radius:999px;padding:2px 9px;background:var(--c);color:var(--paper)}
+.orig{border:none;background:none;color:var(--ink);font-size:.82rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
+h3{margin:var(--rule) 0 0;font-family:var(--hand);font-weight:700;font-size:1.7rem;line-height:var(--rule);color:var(--ink)}
+.ing{position:relative;display:block;width:100%;text-align:left;border:none;background:none;padding:0;cursor:pointer;line-height:var(--rule);min-height:var(--rule)}
+.ing .q{position:absolute;left:-88px;width:78px;text-align:right;font-family:var(--hand);font-size:1.15rem;color:var(--ink);white-space:nowrap;overflow:visible}
+.ing .n{font-family:var(--te);font-size:1.08rem}
+.ing .ne{font-family:var(--en);font-size:1.02rem;color:var(--text-2);margin-left:6px}
+.ing.done .n,.ing.done .ne{text-decoration:line-through;text-decoration-color:var(--chilli);opacity:.5}
+.check{display:inline-block;font-family:var(--hand);font-size:1.05rem;color:var(--chilli);margin-left:6px;white-space:nowrap}
+.step{position:relative;line-height:var(--rule)}
+.step .num{position:absolute;left:-52px;width:36px;text-align:right;font-family:var(--hand);font-weight:700;font-size:1.5rem;color:var(--ink)}
+.step .s-te{font-family:var(--te);font-size:1.05rem}
+.step .s-en{font-family:var(--en);font-size:1.08rem;color:var(--text-2);display:block}
+.step .s-te + .s-en{font-size:1rem}
+.note{font-family:var(--hand);font-size:1.4rem;line-height:var(--rule);color:var(--chilli);transform:rotate(-1deg);margin-top:var(--rule)}
+.note .te{font-family:var(--te);font-size:1rem;color:var(--chilli)}
+.nometh{font-family:var(--hand);font-size:1.35rem;line-height:var(--rule);color:var(--text-2)}
+.photo{margin:var(--rule) 0 0 -74px;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(40,25,10,.18);transform:rotate(-.8deg)}
+.photo img{display:block;width:100%;height:auto}
+.foot{margin-top:calc(var(--rule) * 2);font-family:var(--hand);font-size:1.2rem;color:var(--text-3);line-height:var(--rule)}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="view" id="app"></div></div>
+<script src="recipes.js"></script>
+<script>
+const PAGES = n => `pages/page-${n}.jpg`;
+const CATS = [
+  { id: 'podulu',   te: 'పొడులు',   en: 'Spice powders', c: 'var(--turmeric)' },
+  { id: 'pachallu', te: 'పచ్చళ్ళు', en: 'Chutneys',      c: 'var(--chilli)' },
+  { id: 'kooralu',  te: 'కూరలు',    en: 'Curries',       c: 'var(--leaf)' },
+  { id: 'annalu',   te: 'అన్నాలు',  en: 'Rice',          c: 'var(--tamarind)' },
+  { id: 'rottelu',  te: 'రొట్టెలు', en: 'Rotis',         c: 'var(--jowar)' },
+];
+const catOf = id => CATS.find(c => c.id === id);
+const R = window.RUCHULU;
+let lang = (() => { try { return localStorage.getItem('ruchulu-lang') || 'both'; } catch (e) { return 'both'; } })(), cat = '', q = '', open = null, showPhoto = false;
+const done = new Set();
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const app = document.getElementById('app');
+const langBar = () => `<div class="langs">${[['en', 'EN'], ['both', 'Both'], ['te', 'తెలుగు']].map(([k, t]) => `<button class="${lang === k ? 'on' : ''}" onclick="setLang('${k}')">${t}</button>`).join('')}</div>`;
+function setLang(l) { lang = l; try { localStorage.setItem('ruchulu-lang', l); } catch (e) {} render(); }
+
+function matches(r) {
+  if (cat && r.cat !== cat) return false;
+  if (!q) return true;
+  const hay = [r.te, r.en, ...r.ing.flatMap(i => [i[2], i[3]])].join(' ').toLowerCase();
+  return q.toLowerCase().split(/\s+/).every(w => hay.includes(w));
+}
+
+function renderIndex() {
+  const list = R.filter(matches);
+  let html = `<div class="top"><span></span>${langBar()}</div>
+    <h1 class="mark">రుచులు</h1>
+    ${lang !== 'en' ? '<p class="sub-te">ఘుమఘుమలాడే మా ఇంటి వంటలు</p>' : ''}${lang !== 'te' ? '<p class="sub">Ruchulu · recipes from our kitchen notebook</p>' : ''}
+    <label class="search"><span aria-hidden="true">🔍</span><input id="q" value="${esc(q)}" placeholder="${lang === 'en' ? 'Search a dish or an ingredient' : 'వంటకం లేదా దినుసు వెతకండి · search'}" oninput="q=this.value;renderList()"></label>
+    <div class="cats"><button class="cat ${cat ? '' : 'on'}" onclick="cat='';render()">${lang === 'en' ? 'All' : 'అన్నీ'} <small>${R.length}</small></button>${CATS.map(c => {
+      const n = R.filter(r => r.cat === c.id).length;
+      return n ? `<button class="cat ${cat === c.id ? 'on' : ''}" style="--c:${c.c}" onclick="cat='${c.id}';render()">${lang === 'en' ? c.en : c.te} <small>${n}</small></button>` : '';
+    }).join('')}</div>
+    <div id="list"></div>`;
+  app.innerHTML = html;
+  renderList();
+}
+function renderList() {
+  const list = R.filter(matches);
+  const el = document.getElementById('list');
+  if (!list.length) { el.innerHTML = `<p class="empty">Nothing found — try another word.</p>`; return; }
+  el.innerHTML = CATS.map(c => {
+    const items = list.filter(r => r.cat === c.id);
+    if (!items.length) return '';
+    return `<section class="group" style="--c:${c.c}"><h2>${lang === 'en' ? c.en : c.te}${lang === 'both' ? `<small>${c.en}</small>` : ''}</h2>
+      ${items.map(r => `<button class="entry" style="--c:${c.c}" onclick="openRecipe('${r.id}')"><span class="star">※</span>
+        <span class="meta">${r.ing.length} ${lang === 'en' ? 'items' : 'దినుసులు'}</span>
+        ${lang !== 'en' ? `<span class="t">${r.te}</span>` : ''}${lang !== 'te' ? `<span class="e" style="${lang === 'en' ? 'margin-left:0;font-size:1.2rem;color:var(--text)' : ''}">${esc(r.en)}</span>` : ''}</button>`).join('')}
+    </section>`;
+  }).join('');
+}
+
+function renderRecipe(r) {
+  const c = catOf(r.cat);
+  const L = lang;
+  const ing = r.ing.map((i, k) => {
+    const qty = L === 'te' ? i[1] : i[0];
+    const flag = i[4] === 'check' ? `<span class="check">· please check</span>` : '';
+    return `<button class="ing ${done.has(r.id + k) ? 'done' : ''}" onclick="toggle('${r.id}',${k})"><span class="q">${esc(qty)}</span>`
+      + (L !== 'en' ? `<span class="n">${i[2]}</span>` : '') + (L !== 'te' ? `<span class="ne" style="${L === 'en' ? 'margin-left:0;font-size:1.12rem;color:var(--text)' : ''}">${esc(i[3])}</span>` : '') + flag + '</button>';
+  }).join('');
+  const steps = r.steps ? r.steps.map((s, k) => `<div class="step"><span class="num">${k + 1}.</span>`
+      + (L !== 'en' ? `<span class="s-te">${s[0]}</span>` : '') + (L !== 'te' ? `<span class="s-en" style="${L === 'en' ? 'font-size:1.12rem;color:var(--text)' : ''}">${esc(s[1])}</span>` : '') + '</div>').join('')
+    : `<p class="nometh">${L === 'en' ? 'Only the ingredients are written in the notebook.' : 'పుస్తకంలో దినుసులు మాత్రమే రాసి ఉన్నాయి.'}</p>`;
+  const notes = (r.notes || []).map(n => `<div class="note">${L !== 'en' ? `<span class="te">${n[0]}</span>` : ''}${L === 'both' ? '<br>' : ''}${L !== 'te' ? esc(n[1]) : ''}</div>`).join('');
+  app.innerHTML = `<div class="top"><button class="back" onclick="openRecipe(null)">‹ ${L === 'en' ? 'All recipes' : 'అన్ని వంటకాలు'}</button>${langBar()}</div>
+    ${L !== 'en' ? `<h1 class="rtitle">${r.te}</h1>` : ''}${L !== 'te' ? `<div class="rtitle-en" style="${L === 'en' ? 'font-size:2rem;font-weight:700;color:var(--ink);margin-top:20px;line-height:1.2' : ''}">${esc(r.en)}</div>` : ''}
+    <div class="tags"><span class="tag" style="--c:${c.c}">${L === 'en' ? c.en : c.te}</span><button class="orig" onclick="showPhoto=!showPhoto;render()">${showPhoto ? 'Hide' : 'See'} the notebook page</button></div>
+    ${showPhoto ? `<div class="photo"><img src="${PAGES(r.page)}" alt="Handwritten notebook page" loading="lazy"></div>` : ''}
+    <h3>${L === 'en' ? 'Ingredients' : L === 'te' ? 'కావలసినవి' : 'కావలసినవి · Ingredients'}</h3>${ing}
+    <h3>${L === 'en' ? 'Method' : L === 'te' ? 'తయారీ విధానం' : 'తయారీ · Method'}</h3>${steps}
+    ${notes}
+    <p class="foot">${L === 'en' ? 'Tap an ingredient to tick it off while you cook.' : 'వండేటప్పుడు దినుసును తాకి టిక్ చేసుకోండి.'}</p>`;
+}
+function toggle(id, k) { const key = id + k; done.has(key) ? done.delete(key) : done.add(key); render(); }
+let navIn = false;
+function openRecipe(id) {
+  if (id) { navIn = true; location.hash = id; }
+  else if (navIn) history.back();
+  else { history.replaceState(null, '', location.pathname + location.search); route(); }
+}
+function route() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const changed = id !== (open || '');
+  open = R.some(r => r.id === id) ? id : null; showPhoto = false; render();
+  if (changed) window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', route);
+function render() { const r = R.find(x => x.id === open); r ? renderRecipe(r) : renderIndex(); }
+route();
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+</script>
+</body>
+</html>
