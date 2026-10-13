@@ -1,13 +1,13 @@
 {
   "name": "రుచులు · Ruchulu",
   "short_name": "రుచులు",
-  "description": "ఘుమఘుమలాడే మా ఇంటి వంటలు — recipes from our kitchen notebook",
+  "description": "ఘుమఘుమలాడే మా ఇంటి వంటలు — recipes from our home kitchen",
   "lang": "te",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#fbf6ea",
-  "theme_color": "#fbf6ea",
+  "background_color": "#12452F",
+  "theme_color": "#12452F",
   "icons": [
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },

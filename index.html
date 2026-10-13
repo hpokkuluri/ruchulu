@@ -4,191 +4,489 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>రుచులు · Ruchulu</title>
-<meta name="description" content="ఘుమఘుమలాడే మా ఇంటి వంటలు — recipes from our kitchen notebook">
-<meta name="theme-color" content="#fbf6ea" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#17140f" media="(prefers-color-scheme: dark)">
+<meta name="description" content="ఘుమఘుమలాడే మా ఇంటి వంటలు — recipes from our kitchen">
+<meta name="theme-color" content="#12452F">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="రుచులు">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="stylesheet" href="fonts.css">
 <style>
 :root{
-  --paper:#fbf6ea; --paper-2:#f4ecd8; --ink:#24357a; --ink-soft:rgba(36,53,122,.13); --margin:#d4655a;
-  --text:#2a2118; --text-2:#6b5a45; --text-3:#9a8566;
-  --turmeric:#d4930f; --chilli:#b8322a; --leaf:#4b7a3e; --tamarind:#7a4528; --jowar:#b58a4a;
-  --rule:34px;
-  --te:'Noto Serif Telugu','Noto Sans Telugu',serif; --en:'Crimson Text',Georgia,serif; --hand:'Ruchulu Hand Telugu','Caveat',cursive;
-  --ui:'Ruchulu UI Telugu',-apple-system,system-ui,'Segoe UI',sans-serif;
+  --leaf:#12452F; --leaf-deep:#0b2f20; --leaf-vein:rgba(190,230,160,.10);
+  --turmeric:#E9A11A; --chilli:#C8361F; --curryleaf:#3F7D3A; --tamarind:#7A3F1E; --jowar:#C9A46A; --gold:#F3C04A;
+  --bg:#F3F5EE; --surface:#FFFFFF; --text:#1D2A22; --text-2:#55635A; --text-3:#87938A; --line:#E1E6DC;
+  --te-title:'Gurajada',serif; --te-head:'Ramabhadra','Mandali',sans-serif; --te:'Mandali',sans-serif;
+  --en-head:'Young Serif',Georgia,serif; --en:'Hanken Grotesk',-apple-system,system-ui,sans-serif;
+  --safe-t:env(safe-area-inset-top); --safe-b:env(safe-area-inset-bottom);
 }
 @media (prefers-color-scheme:dark){:root{
-  --paper:#17140f; --paper-2:#211c15; --ink:#a9b8ff; --ink-soft:rgba(169,184,255,.10); --margin:#b0544b;
-  --text:#efe6d6; --text-2:#c8b89c; --text-3:#97866b;
+  --bg:#0E1813; --surface:#16231C; --text:#EEF2EA; --text-2:#B4C0B6; --text-3:#7E8C82; --line:#24332A;
 }}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--text);font-family:var(--ui)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--leaf);overscroll-behavior:none}
+body{font-family:var(--en),var(--te);color:var(--text);-webkit-text-size-adjust:100%}
 button,input{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.wrap{max-width:560px;margin:0 auto;min-height:100vh;position:relative;
-  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--rule) - 1px),var(--ink-soft) calc(var(--rule) - 1px),var(--ink-soft) var(--rule));
-  background-position:0 6px}
-.wrap:before{content:'';position:absolute;top:0;bottom:0;left:76px;border-left:1.5px solid var(--margin);opacity:.55;pointer-events:none}
-.view{padding:calc(14px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom)) 90px;position:relative}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-left:-74px;min-height:var(--rule)}
-.langs{display:flex;gap:2px;background:var(--paper-2);border-radius:999px;padding:3px}
-.langs button{border:none;background:none;border-radius:999px;padding:4px 10px;font-size:.78rem;color:var(--text-2);cursor:pointer}
-.langs button.on{background:var(--ink);color:var(--paper)}
-.back{border:none;background:none;color:var(--ink);font-weight:600;cursor:pointer;padding:4px 0;font-size:.95rem}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.te{font-family:var(--te)}
 
-/* Index */
-.mark{margin:22px 0 0;font-family:var(--te);font-weight:800;font-size:3.4rem;line-height:1.1;color:var(--ink);letter-spacing:.01em}
-.sub-te{font-family:var(--te);font-size:1.12rem;color:var(--text-2);line-height:var(--rule);margin:6px 0 0}
-.sub{font-family:var(--hand),var(--te);font-size:1.45rem;color:var(--text-2);line-height:var(--rule);margin:2px 0 8px}
-.search{display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--ink);margin:6px 0 14px;height:var(--rule)}
-.search input{flex:1;border:none;background:transparent;font-size:1rem;outline:none;padding:0}
+/* Screens stack on top of each other and slide like a native app. */
+#stage{position:fixed;inset:0;overflow:hidden;background:var(--leaf)}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg);will-change:transform}
+.screen.anim{transition:transform .32s cubic-bezier(.2,.8,.2,1),filter .32s}
+.screen.under{filter:brightness(.82)}
+@media (prefers-reduced-motion:reduce){.screen.anim{transition:none}}
+
+/* ---------- Home ---------- */
+.home{background:var(--leaf);color:#fff;display:flex;flex-direction:column;min-height:100%;
+  padding:calc(var(--safe-t) + 18px) 24px calc(var(--safe-b) + 22px)}
+.home:before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent calc(50% - 1px),rgba(210,240,180,.16) calc(50% - 1px),rgba(210,240,180,.16) calc(50% + 1px),transparent calc(50% + 1px)),
+    repeating-linear-gradient(-62deg,transparent 0 26px,var(--leaf-vein) 26px 27px),
+    radial-gradient(120% 70% at 50% 0%,#1b5a3d 0%,transparent 70%)}
+.home > *{position:relative}
+.home-top{display:flex;align-items:center;justify-content:space-between}
+.home-logo{width:52px;height:52px}
+.home-lang{display:flex;background:rgba(255,255,255,.1);border-radius:999px;padding:3px}
+.home-lang button{border:0;background:none;color:rgba(255,255,255,.75);padding:6px 11px;border-radius:999px;font-size:.8rem}
+.home-lang button.on{background:var(--gold);color:var(--leaf-deep);font-weight:600}
+.home-title{font-family:var(--te-title);color:var(--gold);font-size:clamp(5.2rem,27vw,7.4rem);line-height:.9;margin:clamp(14px,4vh,40px) 0 0;
+  text-shadow:0 3px 0 rgba(0,0,0,.18)}
+.home-tag{font-family:var(--te);font-size:1.3rem;margin:12px 0 0;color:#fff}
+.home-tag-en{font-family:var(--en-head);font-size:1.05rem;margin:6px 0 0;color:rgba(255,255,255,.72)}
+.home-meal{flex:1;display:flex;align-items:center;justify-content:center;min-height:240px;margin:8px -8px}
+.home-meal svg{width:min(100%,430px);height:auto;max-height:46vh}
+.enter{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;border:0;border-radius:20px;
+  background:var(--gold);color:var(--leaf-deep);padding:18px 22px;font-size:1.2rem;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.28)}
+.enter .te{font-family:var(--te-head);font-weight:400;font-size:1.35rem}
+.enter svg{width:22px;height:22px}
+.enter:active{transform:scale(.98)}
+.home-foot{text-align:center;color:rgba(255,255,255,.55);font-size:.85rem;margin-top:14px}
+
+/* ---------- App bar ---------- */
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:6px;height:calc(var(--safe-t) + 58px);padding:calc(var(--safe-t) + 6px) 12px 8px 4px;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:background .2s}
+.bar.overlay{margin-bottom:calc(-1 * (var(--safe-t) + 58px))}
+.bar.on-color{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;color:#fff}
+.bar.on-color.dk{color:#3a2a12}
+.back{display:flex;align-items:center;gap:2px;border:0;background:none;padding:8px 10px 8px 6px;font-size:1.02rem;font-weight:600;color:var(--leaf);border-radius:12px}
+@media (prefers-color-scheme:dark){.back{color:var(--gold)}}
+.bar.on-color .back{color:inherit}
+.bar-title{flex:1;min-width:0}
+.bar.on-color .bar-title{opacity:0}
+.back svg{width:24px;height:24px}
+.bar .grow{flex:1}
+.bar-title{font-family:var(--te-head);font-size:1.1rem;transition:opacity .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.bar-title.en{font-family:var(--en);font-weight:600}
+.lang{display:flex;background:var(--line);border-radius:999px;padding:3px;flex-shrink:0}
+.lang button{border:0;background:none;padding:5px 10px;border-radius:999px;font-size:.78rem;color:var(--text-2)}
+.lang button.on{background:var(--leaf);color:#fff;font-weight:600}
+.bar.on-color .lang{background:rgba(0,0,0,.18)}
+.bar.on-color .lang button{color:inherit;opacity:.9}
+.bar.on-color .lang button.on{background:#fff;color:var(--c)}
+
+/* ---------- Categories ---------- */
+.wrap{max-width:720px;margin:0 auto;padding:0 18px calc(var(--safe-b) + 30px)}
+.page-h{font-family:var(--te-head);font-size:2.1rem;line-height:1.15;margin:6px 0 2px;color:var(--leaf)}
+@media (prefers-color-scheme:dark){.page-h{color:var(--gold)}}
+.page-h.en{font-family:var(--en-head);font-size:2rem}
+.page-sub{color:var(--text-2);margin:0 0 16px;font-size:1rem;line-height:1.45}
+.page-sub .te{font-size:1.12rem}
+.search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:0 14px;height:50px;margin-bottom:18px}
+.search svg{width:20px;height:20px;color:var(--text-3);flex-shrink:0}
+.search input{flex:1;border:0;background:none;outline:none;font-size:1.02rem;min-width:0}
 .search input::placeholder{color:var(--text-3)}
-.cats{display:flex;gap:6px;overflow-x:auto;margin:0 0 6px -74px;padding:0 0 6px 74px;scrollbar-width:none}
-.cats::-webkit-scrollbar{display:none}
-.cat{flex-shrink:0;border:1.5px solid var(--c,var(--ink));color:var(--c,var(--ink));background:transparent;border-radius:999px;padding:5px 12px;font-size:.88rem;cursor:pointer;font-family:var(--ui)}
-.cat.on{background:var(--c,var(--ink));color:var(--paper)}
-.cat small{opacity:.7;margin-left:3px}
-.group{margin-top:14px}
-.group h2{margin:0;font-family:var(--te);font-size:1.25rem;line-height:var(--rule);color:var(--c)}
-.group h2 small{font-family:var(--en);font-weight:400;font-size:1rem;color:var(--text-3);margin-left:8px}
-.entry{position:relative;display:block;width:100%;text-align:left;border:none;background:none;cursor:pointer;padding:0;margin:0;min-height:var(--rule)}
-.entry .star{position:absolute;left:-52px;top:0;width:28px;text-align:center;font-size:1.05rem;line-height:var(--rule);color:var(--c)}
-.entry .t{font-family:var(--te);font-size:1.18rem;line-height:var(--rule)}
-.entry .e{font-family:var(--en);font-size:1.05rem;color:var(--text-2);line-height:var(--rule);margin-left:8px}
-.entry .meta{float:right;font-size:.74rem;color:var(--text-3);line-height:var(--rule)}
-.entry:active .t{color:var(--ink)}
-.empty{font-family:var(--hand);font-size:1.4rem;color:var(--text-2);line-height:var(--rule)}
+.search .clear{border:0;background:var(--line);width:26px;height:26px;border-radius:50%;font-size:.9rem;color:var(--text-2);display:none}
+.search.has .clear{display:block}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tile{position:relative;overflow:hidden;border:0;border-radius:26px;aspect-ratio:1/1.08;padding:16px;text-align:left;background:var(--c);color:#fff;
+  display:flex;flex-direction:column;box-shadow:0 8px 22px color-mix(in srgb,var(--c) 35%,transparent)}
+.tile:first-child{grid-column:span 2;aspect-ratio:2.1/1}
+.tile:active{transform:scale(.97)}
+.tile .art{position:absolute;right:-18%;bottom:-20%;width:78%;pointer-events:none}
+.tile:first-child .art{width:50%;right:-6%;bottom:-34%}
+.tile .art svg{width:100%;height:auto;display:block}
+.tile .nm{font-family:var(--te-head);font-size:1.55rem;line-height:1.15;position:relative}
+.tile .nm.en{font-family:var(--en-head);font-size:1.3rem}
+.tile .nm-en{font-family:var(--en-head);font-size:.98rem;opacity:.85;position:relative;margin-top:2px}
+.tile .ct{margin-top:auto;position:relative;align-self:flex-start;background:rgba(0,0,0,.2);border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:600}
+.tile.dark-text{color:#3a2a12}
+.tile.dark-text .ct{background:rgba(255,255,255,.35)}
 
-/* Recipe page */
-.rtitle{margin:20px 0 0;font-family:var(--te);font-weight:800;font-size:2.3rem;line-height:1.2;color:var(--ink)}
-.rtitle-en{font-family:var(--en);font-size:1.35rem;color:var(--text-2);line-height:var(--rule)}
-.tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-height:var(--rule)}
-.tag{font-size:.75rem;border-radius:999px;padding:2px 9px;background:var(--c);color:var(--paper)}
-.orig{border:none;background:none;color:var(--ink);font-size:.82rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
-h3{margin:var(--rule) 0 0;font-family:var(--hand);font-weight:700;font-size:1.7rem;line-height:var(--rule);color:var(--ink)}
-.ing{position:relative;display:block;width:100%;text-align:left;border:none;background:none;padding:0;cursor:pointer;line-height:var(--rule);min-height:var(--rule)}
-.ing .q{position:absolute;left:-88px;width:78px;text-align:right;font-family:var(--hand);font-size:1.15rem;color:var(--ink);white-space:nowrap;overflow:visible}
-.ing .n{font-family:var(--te);font-size:1.08rem}
-.ing .ne{font-family:var(--en);font-size:1.02rem;color:var(--text-2);margin-left:6px}
-.ing.done .n,.ing.done .ne{text-decoration:line-through;text-decoration-color:var(--chilli);opacity:.5}
-.check{display:inline-block;font-family:var(--hand);font-size:1.05rem;color:var(--chilli);margin-left:6px;white-space:nowrap}
-.step{position:relative;line-height:var(--rule)}
-.step .num{position:absolute;left:-52px;width:36px;text-align:right;font-family:var(--hand);font-weight:700;font-size:1.5rem;color:var(--ink)}
-.step .s-te{font-family:var(--te);font-size:1.05rem}
-.step .s-en{font-family:var(--en);font-size:1.08rem;color:var(--text-2);display:block}
-.step .s-te + .s-en{font-size:1rem}
-.note{font-family:var(--hand);font-size:1.4rem;line-height:var(--rule);color:var(--chilli);transform:rotate(-1deg);margin-top:var(--rule)}
-.note .te{font-family:var(--te);font-size:1rem;color:var(--chilli)}
-.nometh{font-family:var(--hand);font-size:1.35rem;line-height:var(--rule);color:var(--text-2)}
-.photo{margin:var(--rule) 0 0 -74px;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(40,25,10,.18);transform:rotate(-.8deg)}
-.photo img{display:block;width:100%;height:auto}
-.foot{margin-top:calc(var(--rule) * 2);font-family:var(--hand);font-size:1.2rem;color:var(--text-3);line-height:var(--rule)}
+/* ---------- Recipe list ---------- */
+.hero{position:relative;overflow:hidden;background:var(--c);color:#fff;padding:calc(var(--safe-t) + 64px) 20px 26px;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end}
+.hero .art{position:absolute;right:-60px;top:calc(var(--safe-t) + 10px);width:250px;opacity:.95;pointer-events:none}
+.hero .art svg{width:100%;height:auto}
+.hero h1{position:relative;margin:0;font-family:var(--te-head);font-weight:400;font-size:2.3rem;line-height:1.15;max-width:72%}
+.hero h1.en{font-family:var(--en-head);font-size:2.1rem}
+.hero .h-en{position:relative;font-family:var(--en-head);font-size:1.15rem;opacity:.88;margin-top:4px;max-width:72%}
+.hero.dark-text{color:#3a2a12}
+.list{margin:-14px 0 0;position:relative;background:var(--bg);border-radius:24px 24px 0 0;padding:18px 18px calc(var(--safe-b) + 30px)}
+.row{display:flex;align-items:center;gap:14px;width:100%;border:0;background:var(--surface);border-radius:18px;padding:14px 14px 14px 16px;margin-bottom:10px;text-align:left;
+  box-shadow:0 1px 0 var(--line)}
+.row:active{background:var(--line)}
+.row .dot{width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
+.row .tx{flex:1;min-width:0}
+.row .t1{font-family:var(--te-head);font-size:1.22rem;line-height:1.3}
+.row .t1.en{font-family:var(--en);font-weight:600;font-size:1.1rem}
+.row .t2{color:var(--text-2);font-size:.95rem;margin-top:1px}
+.row .meta{color:var(--text-3);font-size:.8rem;white-space:nowrap}
+.row .chev{width:18px;height:18px;color:var(--text-3);flex-shrink:0}
+.empty{color:var(--text-2);padding:20px 4px;font-size:1rem}
+.res-h{font-size:.9rem;color:var(--text-2);margin:2px 2px 10px}
+
+/* ---------- Recipe ---------- */
+.chips{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:0;border-radius:999px;padding:6px 12px;font-size:.85rem;font-weight:600;background:rgba(255,255,255,.22);color:inherit;display:inline-flex;align-items:center;gap:6px}
+.chip svg{width:16px;height:16px}
+.hero.dark-text .chip{background:rgba(255,255,255,.4)}
+.sec{margin:8px 0 22px}
+.sec h2{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;font-family:var(--te-head);font-weight:400;font-size:1.35rem;color:var(--text)}
+.sec h2 .en{font-family:var(--en-head);font-size:1.1rem;color:var(--text-2)}
+.sec h2.only-en{font-family:var(--en-head)}
+.card{background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 1px 0 var(--line)}
+.ing{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;text-align:left;padding:13px 16px;border-top:1px solid var(--line)}
+.ing:first-child{border-top:0}
+.ing .box{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.ing .box svg{width:14px;height:14px;color:#fff;opacity:0}
+.ing.done .box{background:var(--c);border-color:var(--c)}
+.ing.done .box svg{opacity:1}
+.ing .nm{flex:1;min-width:0}
+.ing .n-te{font-family:var(--te);font-size:1.12rem;line-height:1.35}
+.ing .n-en{color:var(--text-2);font-size:.95rem}
+.ing .n-en.solo{color:var(--text);font-size:1.05rem}
+.ing.done .n-te,.ing.done .n-en{text-decoration:line-through;opacity:.45}
+.ing .q{flex-shrink:0;max-width:40%;text-align:right;font-weight:600;font-size:.95rem;color:var(--c-ink,var(--c))}
+.ing .q.te{font-family:var(--te);font-weight:400;font-size:1.02rem}
+.flag{display:inline-block;margin-top:3px;font-size:.78rem;font-weight:600;color:var(--chilli);background:color-mix(in srgb,var(--chilli) 12%,transparent);border-radius:6px;padding:1px 7px}
+.steps{counter-reset:s}
+.step{display:flex;gap:14px;padding:14px 16px;border-top:1px solid var(--line)}
+.step:first-child{border-top:0}
+.step .num{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.95rem}
+.step.dk .num{color:#3a2a12}
+.step .s-te{font-family:var(--te);font-size:1.12rem;line-height:1.5}
+.step .s-en{color:var(--text-2);font-size:1rem;line-height:1.5;margin-top:2px}
+.step .s-en.solo{color:var(--text);font-size:1.06rem;margin-top:0}
+.nometh{padding:16px;color:var(--text-2);font-size:1rem;line-height:1.5}
+.tip{background:color-mix(in srgb,var(--turmeric) 16%,var(--surface));border-radius:20px;padding:14px 16px;margin-bottom:22px}
+.tip b{display:block;font-size:.85rem;color:color-mix(in srgb,var(--turmeric) 70%,var(--text));margin-bottom:4px}
+.tip .te{font-size:1.1rem;line-height:1.5}
+.tip .en{color:var(--text-2);line-height:1.5}
+.tip .en.solo{color:var(--text)}
+.hint{text-align:center;color:var(--text-3);font-size:.85rem;margin:6px 0 0}
+
+/* Notebook photo viewer */
+.viewer{position:fixed;inset:0;z-index:50;background:rgba(8,14,10,.94);display:flex;flex-direction:column;opacity:0;transition:opacity .2s}
+.viewer.show{opacity:1}
+.viewer .v-bar{display:flex;justify-content:flex-end;padding:calc(var(--safe-t) + 8px) 12px 8px}
+.viewer .v-close{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:8px 16px;font-weight:600}
+.viewer .v-img{flex:1;overflow:auto;padding:0 10px calc(var(--safe-b) + 14px);touch-action:pinch-zoom pan-x pan-y}
+.viewer img{width:100%;height:auto;border-radius:12px;display:block}
 </style>
 </head>
 <body>
-<div class="wrap"><div class="view" id="app"></div></div>
+<div id="stage"></div>
 <script src="recipes.js"></script>
+<script src="art.js"></script>
 <script>
-const PAGES = n => `pages/page-${n}.jpg`;
+const R = window.RUCHULU, ART = window.RUCHULU_ART;
 const CATS = [
-  { id: 'podulu',   te: 'పొడులు',   en: 'Spice powders', c: 'var(--turmeric)' },
-  { id: 'pachallu', te: 'పచ్చళ్ళు', en: 'Chutneys',      c: 'var(--chilli)' },
-  { id: 'kooralu',  te: 'కూరలు',    en: 'Curries',       c: 'var(--leaf)' },
-  { id: 'annalu',   te: 'అన్నాలు',  en: 'Rice',          c: 'var(--tamarind)' },
-  { id: 'rottelu',  te: 'రొట్టెలు', en: 'Rotis',         c: 'var(--jowar)' },
+  { id: 'podulu',   te: 'పొడులు',   en: 'Spice powders', c: '#E9A11A', dark: true,  ink: '#9a6200', sub: 'Podis to keep in the jar' },
+  { id: 'pachallu', te: 'పచ్చళ్ళు', en: 'Chutneys',      c: '#C8361F' },
+  { id: 'kooralu',  te: 'కూరలు',    en: 'Curries',       c: '#3F7D3A' },
+  { id: 'annalu',   te: 'అన్నాలు',  en: 'Rice',          c: '#7A3F1E' },
+  { id: 'rottelu',  te: 'రొట్టెలు', en: 'Rotis',         c: '#C9A46A', dark: true, ink: '#8a6326' },
 ];
 const catOf = id => CATS.find(c => c.id === id);
-const R = window.RUCHULU;
-let lang = (() => { try { return localStorage.getItem('ruchulu-lang') || 'both'; } catch (e) { return 'both'; } })(), cat = '', q = '', open = null, showPhoto = false;
+const store = { get(k, d) { try { return localStorage.getItem(k) ?? d; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+let lang = store.get('ruchulu-lang', 'both');
+let query = '';
 const done = new Set();
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-const app = document.getElementById('app');
-const langBar = () => `<div class="langs">${[['en', 'EN'], ['both', 'Both'], ['te', 'తెలుగు']].map(([k, t]) => `<button class="${lang === k ? 'on' : ''}" onclick="setLang('${k}')">${t}</button>`).join('')}</div>`;
-function setLang(l) { lang = l; try { localStorage.setItem('ruchulu-lang', l); } catch (e) {} render(); }
-
-function matches(r) {
-  if (cat && r.cat !== cat) return false;
-  if (!q) return true;
-  const hay = [r.te, r.en, ...r.ing.flatMap(i => [i[2], i[3]])].join(' ').toLowerCase();
-  return q.toLowerCase().split(/\s+/).every(w => hay.includes(w));
+const scrollMem = {};
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const T = (te, en) => lang === 'en' ? en : te;           // single label in the chosen language (Both shows Telugu)
+const ICON = {
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  chev: '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+  tick: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  page: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7"/></svg>',
+};
+function langBar(cls) {
+  return `<div class="${cls}" data-noswipe>${[['en', 'EN'], ['both', 'Both'], ['te', 'తెలుగు']].map(([k, t]) =>
+    `<button class="${lang === k ? 'on' : ''}" onclick="setLang('${k}')" aria-pressed="${lang === k}">${t}</button>`).join('')}</div>`;
+}
+function setLang(l) {
+  lang = l; store.set('ruchulu-lang', l);
+  const s = curScreen(); const y = s.el.scrollTop; s.el.innerHTML = view(s.route); s.el.scrollTop = y; wire(s);
 }
 
-function renderIndex() {
-  const list = R.filter(matches);
-  let html = `<div class="top"><span></span>${langBar()}</div>
-    <h1 class="mark">రుచులు</h1>
-    ${lang !== 'en' ? '<p class="sub-te">ఘుమఘుమలాడే మా ఇంటి వంటలు</p>' : ''}${lang !== 'te' ? '<p class="sub">Ruchulu · recipes from our kitchen notebook</p>' : ''}
-    <label class="search"><span aria-hidden="true">🔍</span><input id="q" value="${esc(q)}" placeholder="${lang === 'en' ? 'Search a dish or an ingredient' : 'వంటకం లేదా దినుసు వెతకండి · search'}" oninput="q=this.value;renderList()"></label>
-    <div class="cats"><button class="cat ${cat ? '' : 'on'}" onclick="cat='';render()">${lang === 'en' ? 'All' : 'అన్నీ'} <small>${R.length}</small></button>${CATS.map(c => {
-      const n = R.filter(r => r.cat === c.id).length;
-      return n ? `<button class="cat ${cat === c.id ? 'on' : ''}" style="--c:${c.c}" onclick="cat='${c.id}';render()">${lang === 'en' ? c.en : c.te} <small>${n}</small></button>` : '';
-    }).join('')}</div>
-    <div id="list"></div>`;
-  app.innerHTML = html;
-  renderList();
-}
-function renderList() {
-  const list = R.filter(matches);
-  const el = document.getElementById('list');
-  if (!list.length) { el.innerHTML = `<p class="empty">Nothing found — try another word.</p>`; return; }
-  el.innerHTML = CATS.map(c => {
-    const items = list.filter(r => r.cat === c.id);
-    if (!items.length) return '';
-    return `<section class="group" style="--c:${c.c}"><h2>${lang === 'en' ? c.en : c.te}${lang === 'both' ? `<small>${c.en}</small>` : ''}</h2>
-      ${items.map(r => `<button class="entry" style="--c:${c.c}" onclick="openRecipe('${r.id}')"><span class="star">※</span>
-        <span class="meta">${r.ing.length} ${lang === 'en' ? 'items' : 'దినుసులు'}</span>
-        ${lang !== 'en' ? `<span class="t">${r.te}</span>` : ''}${lang !== 'te' ? `<span class="e" style="${lang === 'en' ? 'margin-left:0;font-size:1.2rem;color:var(--text)' : ''}">${esc(r.en)}</span>` : ''}</button>`).join('')}
-    </section>`;
-  }).join('');
+/* ---------- Views ---------- */
+function vHome() {
+  return `<div class="home">
+    <div class="home-top"><div class="home-logo">${ART.logo()}</div>${langBar('home-lang')}</div>
+    <h1 class="home-title">రుచులు</h1>
+    ${lang !== 'en' ? '<p class="home-tag">ఘుమఘుమలాడే మా ఇంటి వంటలు</p>' : ''}
+    ${lang !== 'te' ? '<p class="home-tag-en">Recipes from our home kitchen</p>' : ''}
+    <div class="home-meal">${ART.meal()}</div>
+    <button class="enter" onclick="go('k')">${lang === 'en' ? 'Come in' : '<span class="te">లోపలికి రండి</span>'}${ICON.arrow}</button>
+    <p class="home-foot">${lang === 'en' ? `${R.length} recipes from the family notebook` : `${R.length} వంటకాలు`}</p>
+  </div>`;
 }
 
-function renderRecipe(r) {
+function vCats() {
+  return `<div class="bar"><button class="back" onclick="goBack()">${ICON.back}${T('మొదటి పేజీ', 'Home')}</button><span class="grow"></span>${langBar('lang')}</div>
+  <div class="wrap">
+    <h1 class="page-h ${lang === 'en' ? 'en' : ''}">${T('వంటలు', 'Recipes')}</h1>
+    <p class="page-sub">${lang !== 'en' ? '<span class="te">ఈ రోజు ఏం వండుదాం?</span>' : ''}${lang === 'both' ? '<br>' : ''}${lang !== 'te' ? 'What shall we cook today?' : ''}</p>
+    <label class="search ${query ? 'has' : ''}" data-noswipe>${ICON.search}
+      <input id="q" type="text" enterkeyhint="search" autocomplete="off" value="${esc(query)}" placeholder="${lang === 'en' ? 'Search a dish or an ingredient' : 'వంటకం లేదా దినుసు వెతకండి'}">
+      <button class="clear" type="button" aria-label="Clear search" onclick="clearSearch()">✕</button></label>
+    <div id="cat-body">${query ? results() : tiles()}</div>
+  </div>`;
+}
+function tiles() {
+  return `<div class="tiles">${CATS.map(c => {
+    const n = R.filter(r => r.cat === c.id).length;
+    if (!n) return '';
+    return `<button class="tile ${c.dark ? 'dark-text' : ''}" style="--c:${c.c}" onclick="go('c/${c.id}')">
+      <span class="art">${ART[c.id]()}</span>
+      <span class="nm ${lang === 'en' ? 'en' : ''}">${T(c.te, c.en)}</span>
+      ${lang === 'both' ? `<span class="nm-en">${c.en}</span>` : ''}
+      <span class="ct">${n} ${lang === 'en' ? (n === 1 ? 'recipe' : 'recipes') : (n === 1 ? 'వంటకం' : 'వంటకాలు')}</span></button>`;
+  }).join('')}</div>`;
+}
+function matches(r, q) {
+  const hay = [r.te, r.en, catOf(r.cat).te, catOf(r.cat).en, ...r.ing.flatMap(i => [i[2], i[3]])].join(' ').toLowerCase();
+  return q.toLowerCase().split(/\s+/).filter(Boolean).every(w => hay.includes(w));
+}
+function row(r) {
   const c = catOf(r.cat);
-  const L = lang;
+  return `<button class="row" style="--c:${c.c}" onclick="go('r/${r.id}')"><span class="dot"></span>
+    <span class="tx">${lang !== 'en' ? `<div class="t1">${r.te}</div>` : `<div class="t1 en">${esc(r.en)}</div>`}${lang === 'both' ? `<div class="t2">${esc(r.en)}</div>` : ''}</span>
+    <span class="meta">${r.ing.length} ${lang === 'en' ? 'items' : 'దినుసులు'}</span>${ICON.chev}</button>`;
+}
+function results() {
+  const list = R.filter(r => matches(r, query));
+  if (!list.length) return `<p class="empty">${lang === 'en' ? 'No recipe matches that. Try a dish name or one ingredient, like “tamarind”.' : 'ఏ వంటకమూ దొరకలేదు. వంటకం పేరు లేదా ఒక దినుసు (ఉదా: చింతపండు) వెతకండి.'}</p>`;
+  return `<p class="res-h">${list.length} ${lang === 'en' ? (list.length === 1 ? 'recipe' : 'recipes') : (list.length === 1 ? 'వంటకం' : 'వంటకాలు')}</p>${list.map(row).join('')}`;
+}
+function clearSearch() { query = ''; const s = curScreen(); s.el.querySelector('#q').value = ''; s.el.querySelector('.search').classList.remove('has'); s.el.querySelector('#cat-body').innerHTML = tiles(); }
+
+function vCat(id) {
+  const c = catOf(id); if (!c) return vCats();
+  const list = R.filter(r => r.cat === id);
+  return `<div class="bar overlay on-color ${c.dark ? 'dk' : ''}" style="--c:${c.c}"><button class="back" onclick="goBack()">${ICON.back}${T('వంటలు', 'Recipes')}</button><span class="bar-title ${lang === 'en' ? 'en' : ''}">${T(c.te, c.en)}</span>${langBar('lang')}</div>
+  <header class="hero ${c.dark ? 'dark-text' : ''}" style="--c:${c.c}"><span class="art">${ART[c.id]()}</span>
+    <h1 class="${lang === 'en' ? 'en' : ''}">${T(c.te, c.en)}</h1>${lang === 'both' ? `<div class="h-en">${c.en}</div>` : ''}</header>
+  <div class="list">${list.map(row).join('')}</div>`;
+}
+
+function vRecipe(id) {
+  const r = R.find(x => x.id === id); if (!r) return vCats();
+  const c = catOf(r.cat), L = lang, dk = c.dark ? 'dk' : '';
+  const qty = i => L === 'te' ? i[1] : i[0];
   const ing = r.ing.map((i, k) => {
-    const qty = L === 'te' ? i[1] : i[0];
-    const flag = i[4] === 'check' ? `<span class="check">· please check</span>` : '';
-    return `<button class="ing ${done.has(r.id + k) ? 'done' : ''}" onclick="toggle('${r.id}',${k})"><span class="q">${esc(qty)}</span>`
-      + (L !== 'en' ? `<span class="n">${i[2]}</span>` : '') + (L !== 'te' ? `<span class="ne" style="${L === 'en' ? 'margin-left:0;font-size:1.12rem;color:var(--text)' : ''}">${esc(i[3])}</span>` : '') + flag + '</button>';
+    const q = qty(i), teQ = /[ఀ-౿]/.test(q);
+    const flag = i[4] === 'check' ? `<div><span class="flag">${L === 'en' ? 'please check' : L === 'te' ? 'సరిచూడాలి' : 'సరిచూడాలి · please check'}</span></div>` : '';
+    return `<button class="ing ${done.has(r.id + k) ? 'done' : ''}" data-k="${k}" aria-pressed="${done.has(r.id + k)}"><span class="box">${ICON.tick}</span>
+      <span class="nm">${L !== 'en' ? `<div class="n-te">${i[2]}</div>` : ''}${L !== 'te' ? `<div class="n-en ${L === 'en' ? 'solo' : ''}">${esc(i[3])}</div>` : ''}${flag}</span>
+      ${q ? `<span class="q ${teQ ? 'te' : ''}">${esc(q)}</span>` : ''}</button>`;
   }).join('');
-  const steps = r.steps ? r.steps.map((s, k) => `<div class="step"><span class="num">${k + 1}.</span>`
-      + (L !== 'en' ? `<span class="s-te">${s[0]}</span>` : '') + (L !== 'te' ? `<span class="s-en" style="${L === 'en' ? 'font-size:1.12rem;color:var(--text)' : ''}">${esc(s[1])}</span>` : '') + '</div>').join('')
-    : `<p class="nometh">${L === 'en' ? 'Only the ingredients are written in the notebook.' : 'పుస్తకంలో దినుసులు మాత్రమే రాసి ఉన్నాయి.'}</p>`;
-  const notes = (r.notes || []).map(n => `<div class="note">${L !== 'en' ? `<span class="te">${n[0]}</span>` : ''}${L === 'both' ? '<br>' : ''}${L !== 'te' ? esc(n[1]) : ''}</div>`).join('');
-  app.innerHTML = `<div class="top"><button class="back" onclick="openRecipe(null)">‹ ${L === 'en' ? 'All recipes' : 'అన్ని వంటకాలు'}</button>${langBar()}</div>
-    ${L !== 'en' ? `<h1 class="rtitle">${r.te}</h1>` : ''}${L !== 'te' ? `<div class="rtitle-en" style="${L === 'en' ? 'font-size:2rem;font-weight:700;color:var(--ink);margin-top:20px;line-height:1.2' : ''}">${esc(r.en)}</div>` : ''}
-    <div class="tags"><span class="tag" style="--c:${c.c}">${L === 'en' ? c.en : c.te}</span><button class="orig" onclick="showPhoto=!showPhoto;render()">${showPhoto ? 'Hide' : 'See'} the notebook page</button></div>
-    ${showPhoto ? `<div class="photo"><img src="${PAGES(r.page)}" alt="Handwritten notebook page" loading="lazy"></div>` : ''}
-    <h3>${L === 'en' ? 'Ingredients' : L === 'te' ? 'కావలసినవి' : 'కావలసినవి · Ingredients'}</h3>${ing}
-    <h3>${L === 'en' ? 'Method' : L === 'te' ? 'తయారీ విధానం' : 'తయారీ · Method'}</h3>${steps}
+  const steps = r.steps ? `<div class="card steps">${r.steps.map((s, k) => `<div class="step ${dk}"><span class="num">${k + 1}</span><div>
+      ${L !== 'en' ? `<div class="s-te">${s[0]}</div>` : ''}${L !== 'te' ? `<div class="s-en ${L === 'en' ? 'solo' : ''}">${esc(s[1])}</div>` : ''}</div></div>`).join('')}</div>`
+    : `<div class="card"><p class="nometh">${L === 'en' ? 'The notebook lists only the ingredients for this one. Tap “Notebook page” to see it as she wrote it.' : 'పుస్తకంలో దినుసులు మాత్రమే రాసి ఉన్నాయి. ఆమె రాసినట్టే చూడటానికి “పుస్తకం పేజీ” నొక్కండి.'}</p></div>`;
+  const notes = (r.notes || []).map(n => `<div class="tip"><b>${T('చిట్కా', 'Tip')}</b>${L !== 'en' ? `<div class="te">${n[0]}</div>` : ''}${L !== 'te' ? `<div class="en ${L === 'en' ? 'solo' : ''}">${esc(n[1])}</div>` : ''}</div>`).join('');
+  const h2 = (te, en) => L === 'both' ? `<h2>${te} <span class="en">${en}</span></h2>` : L === 'en' ? `<h2 class="only-en">${en}</h2>` : `<h2>${te}</h2>`;
+  return `<div class="bar overlay on-color ${c.dark ? 'dk' : ''}" style="--c:${c.c}"><button class="back" onclick="goBack()">${ICON.back}${T(c.te, c.en)}</button><span class="bar-title ${L === 'en' ? 'en' : ''}">${L === 'en' ? esc(r.en) : r.te}</span>${langBar('lang')}</div>
+  <header class="hero ${c.dark ? 'dark-text' : ''}" style="--c:${c.c}"><span class="art">${ART[c.id]()}</span>
+    <h1 class="${L === 'en' ? 'en' : ''}">${L === 'en' ? esc(r.en) : r.te}</h1>${L === 'both' ? `<div class="h-en">${esc(r.en)}</div>` : ''}
+    <div class="chips"><span class="chip">${r.ing.length} ${L === 'en' ? 'ingredients' : 'దినుసులు'}</span>
+      <button class="chip" onclick="showPage(${r.page})">${ICON.page}${T('పుస్తకం పేజీ', 'Notebook page')}</button></div></header>
+  <div class="list" style="--c:${c.c};--c-ink:${c.ink || c.c}">
+    <section class="sec">${h2('కావలసినవి', 'Ingredients')}<div class="card" id="ings">${ing}</div>
+      <p class="hint">${L === 'en' ? 'Tap an ingredient to tick it off as you add it.' : 'వేసిన దినుసును తాకి టిక్ చేసుకోండి.'}</p></section>
+    <section class="sec">${h2('తయారీ విధానం', 'Method')}${steps}</section>
     ${notes}
-    <p class="foot">${L === 'en' ? 'Tap an ingredient to tick it off while you cook.' : 'వండేటప్పుడు దినుసును తాకి టిక్ చేసుకోండి.'}</p>`;
+  </div>`;
 }
-function toggle(id, k) { const key = id + k; done.has(key) ? done.delete(key) : done.add(key); render(); }
-let navIn = false;
-function openRecipe(id) {
-  if (id) { navIn = true; location.hash = id; }
-  else if (navIn) history.back();
-  else { history.replaceState(null, '', location.pathname + location.search); route(); }
+
+function showPage(n) {
+  const v = document.createElement('div');
+  v.className = 'viewer'; v.setAttribute('data-noswipe', '');
+  v.innerHTML = `<div class="v-bar"><button class="v-close">${T('మూసివేయి', 'Close')}</button></div><div class="v-img"><img src="pages/page-${n}.jpg" alt="Handwritten notebook page"></div>`;
+  document.body.appendChild(v); requestAnimationFrame(() => v.classList.add('show'));
+  const close = () => { v.classList.remove('show'); setTimeout(() => v.remove(), 200); };
+  v.querySelector('.v-close').onclick = close;
 }
-function route() {
-  const id = decodeURIComponent(location.hash.slice(1));
-  const changed = id !== (open || '');
-  open = R.some(r => r.id === id) ? id : null; showPhoto = false; render();
-  if (changed) window.scrollTo(0, 0);
+
+/* ---------- Routing & native-style navigation ---------- */
+// Routes: '' home · 'k' all categories · 'c/<cat>' one category · 'r/<recipe>' one recipe
+function view(route) {
+  if (route === 'k') return vCats();
+  if (route.startsWith('c/')) return vCat(route.slice(2));
+  if (route.startsWith('r/')) return vRecipe(route.slice(2));
+  return vHome();
 }
-window.addEventListener('hashchange', route);
-function render() { const r = R.find(x => x.id === open); r ? renderRecipe(r) : renderIndex(); }
-route();
-if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+function parent(route) {
+  if (route.startsWith('r/')) { const r = R.find(x => x.id === route.slice(2)); return r ? 'c/' + r.cat : 'k'; }
+  if (route.startsWith('c/')) return 'k';
+  if (route === 'k') return '';
+  return null;
+}
+const stage = document.getElementById('stage');
+const stack = [];                         // screens currently in the DOM (normally 1)
+const curScreen = () => stack[stack.length - 1];
+function makeScreen(route) {
+  const el = document.createElement('div');
+  el.className = 'screen'; el.innerHTML = view(route);
+  const s = { route, el }; wire(s); return s;
+}
+function wire(s) {
+  const el = s.el;
+  const bar = el.querySelector('.bar.on-color'), hero = el.querySelector('.hero');
+  if (bar && hero) {
+    const upd = () => bar.classList.toggle('on-color', el.scrollTop < hero.offsetHeight - bar.offsetHeight);
+    el.onscroll = upd; requestAnimationFrame(upd);
+  }
+  const q = el.querySelector('#q');
+  if (q) q.oninput = () => { query = q.value; el.querySelector('.search').classList.toggle('has', !!query); el.querySelector('#cat-body').innerHTML = query ? results() : tiles(); };
+  const ings = el.querySelector('#ings');
+  if (ings) ings.onclick = e => {
+    const b = e.target.closest('.ing'); if (!b) return;
+    const key = s.route.slice(2) + b.dataset.k; done.has(key) ? done.delete(key) : done.add(key);
+    b.classList.toggle('done', done.has(key)); b.setAttribute('aria-pressed', done.has(key));
+  };
+}
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function transition(next, dir, fromX) {
+  document.querySelectorAll('.viewer').forEach(v => v.remove());
+  const cur = curScreen();
+  if (cur) scrollMem[cur.route] = cur.el.scrollTop;
+  if (dir === 'back' && scrollMem[next.route] != null) requestAnimationFrame(() => { next.el.scrollTop = scrollMem[next.route]; });
+  if (dir === 'fwd') delete scrollMem[next.route];
+  if (!cur || dir === 'none' || reduce) {
+    stage.innerHTML = ''; stack.length = 0; stage.appendChild(next.el); stack.push(next);
+    if (dir === 'back' && scrollMem[next.route] != null) next.el.scrollTop = scrollMem[next.route];
+    return;
+  }
+  const W = stage.clientWidth;
+  if (dir === 'fwd') {
+    next.el.style.transform = `translateX(${W}px)`; stage.appendChild(next.el);
+    next.el.getBoundingClientRect();
+    next.el.classList.add('anim'); cur.el.classList.add('anim', 'under');
+    next.el.style.transform = 'translateX(0)'; cur.el.style.transform = `translateX(${-W * .28}px)`;
+  } else {
+    if (!next.el.parentNode) { next.el.style.transform = `translateX(${-W * .28}px)`; next.el.classList.add('under'); stage.insertBefore(next.el, cur.el); }
+    if (fromX != null) cur.el.style.transform = `translateX(${fromX}px)`;
+    next.el.getBoundingClientRect();
+    next.el.classList.add('anim'); cur.el.classList.add('anim');
+    next.el.classList.remove('under'); next.el.style.transform = 'translateX(0)'; cur.el.style.transform = `translateX(${W}px)`;
+  }
+  stack.push(next);
+  setTimeout(() => {
+    [...stage.children].forEach(c => { if (c !== next.el) c.remove(); });
+    stack.length = 0; stack.push(next);
+    next.el.classList.remove('anim', 'under'); next.el.style.transform = '';
+  }, 340);
+}
+// Every page change goes into the browser history, so the phone's own Back works too.
+let idx = 0, ourBack = false, pending = null;
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+function go(route) {
+  if (curScreen() && curScreen().route === route) return;
+  idx++; history.pushState({ app: 'ruchulu', idx, route }, '', route ? '#' + route : location.pathname);
+  transition(makeScreen(route), 'fwd');
+}
+function goBack(fromX, prepared) {
+  const cur = curScreen(); if (!cur) return;
+  const p = parent(cur.route); if (p === null) return;
+  const st = history.state;
+  if (st && st.app === 'ruchulu' && st.idx > 0) { ourBack = true; pending = { fromX, prepared }; history.back(); }
+  else {                                   // opened straight onto this page: step up to its parent
+    history.replaceState({ app: 'ruchulu', idx: 0, route: p }, '', p ? '#' + p : location.pathname);
+    transition(prepared && prepared.route === p ? prepared : makeScreen(p), 'back', fromX);
+  }
+}
+addEventListener('popstate', e => {
+  const s = e.state;
+  const route = s && s.app === 'ruchulu' ? s.route : decodeURIComponent(location.hash.slice(1));
+  idx = s && s.app === 'ruchulu' ? s.idx : 0;
+  const pend = pending; pending = null;
+  const animate = ourBack || standalone; ourBack = false;
+  const cur = curScreen();
+  const goingDeeper = cur && parent(route) === cur.route;
+  const next = pend && pend.prepared && pend.prepared.route === route ? pend.prepared : makeScreen(route);
+  transition(next, animate ? (goingDeeper ? 'fwd' : 'back') : 'none', pend ? pend.fromX : null);
+});
+
+/* Swipe right to go back, with the page following your finger. */
+(function swipeBack() {
+  let x0 = null, y0 = 0, t0 = 0, dragging = false, under = null, cur = null, W = 0;
+  document.addEventListener('touchstart', e => {
+    x0 = null;
+    if (e.touches.length !== 1 || document.querySelector('.viewer')) return;
+    const t = e.touches[0];
+    if (!standalone && t.clientX < 24) return;           // in Safari the screen edge belongs to Safari's own back swipe
+    if (e.target.closest && e.target.closest('input, [data-noswipe]')) return;
+    if (!curScreen() || parent(curScreen().route) === null) return;
+    x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); dragging = false;
+  }, { passive: true });
+  document.addEventListener('touchmove', e => {
+    if (x0 === null) return;
+    const t = e.touches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+    if (!dragging) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { x0 = null; return; }
+      if (dx < 12) return;
+      dragging = true; cur = curScreen(); W = stage.clientWidth;
+      if (!reduce) {
+        under = makeScreen(parent(cur.route)); under.el.classList.add('under');
+        under.el.style.transform = `translateX(${-W * .28}px)`; stage.insertBefore(under.el, cur.el);
+        if (scrollMem[under.route] != null) under.el.scrollTop = scrollMem[under.route];
+      }
+    }
+    if (e.cancelable) e.preventDefault();
+    const x = Math.max(0, dx);
+    if (!reduce) {
+      cur.el.style.transform = `translateX(${x}px)`;
+      under.el.style.transform = `translateX(${-W * .28 * (1 - x / W)}px)`;
+      under.el.style.filter = `brightness(${.82 + .18 * x / W})`;
+    }
+  }, { passive: false });
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const t = e.changedTouches[0], dx = t.clientX - x0, dt = Date.now() - t0;
+    x0 = null;
+    if (!dragging) return;
+    dragging = false;
+    const commit = dx > W * .33 || (dx > 50 && dx / dt > .5);
+    if (reduce) { if (commit) goBack(); return; }
+    under.el.style.filter = '';
+    if (commit) { goBack(dx, under); }
+    else {
+      cur.el.classList.add('anim'); under.el.classList.add('anim');
+      cur.el.style.transform = 'translateX(0)'; under.el.style.transform = `translateX(${-W * .28}px)`;
+      const u = under; setTimeout(() => { u.el.remove(); cur.el.classList.remove('anim'); cur.el.style.transform = ''; }, 340);
+    }
+    under = null;
+  }, { passive: true });
+})();
+
+/* Start: open whatever page the address points to (home by default). */
+(function start() {
+  const route = decodeURIComponent(location.hash.slice(1));
+  const ok = route === '' || route === 'k' || (route.startsWith('c/') && catOf(route.slice(2))) || (route.startsWith('r/') && R.some(r => r.id === route.slice(2)));
+  const r0 = ok ? route : '';
+  history.replaceState({ app: 'ruchulu', idx: 0, route: r0 }, '', r0 ? '#' + r0 : location.pathname);
+  transition(makeScreen(r0), 'none');
+})();
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 </script>
 </body>
 </html>

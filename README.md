@@ -8,7 +8,8 @@ On a phone, use *Share → Add to Home Screen* (iPhone) or *Install app* (Androi
 ## What's here
 | File | What it is |
 |---|---|
-| `index.html` | The app (notebook-style design, search, categories, EN / Both / తెలుగు, light & dark) |
+| `index.html` | The app: welcome screen, category tiles, recipe lists, recipes; Back button and swipe-right to go back; EN / Both / తెలుగు; light & dark |
+| `art.js` | The food illustrations and logo (drawn in code, so they work offline) |
 | `recipes.js` | All the recipes — the only file to edit when adding recipes |
 | `pages/page-N.jpg` | Photos of the notebook pages ("See the notebook page") |
 | `fonts/`, `fonts.css` | Self-hosted fonts, so it looks right offline |
@@ -18,8 +19,8 @@ On a phone, use *Share → Add to Home Screen* (iPhone) or *Install app* (Androi
 ## Adding recipes
 1. Add the photo as `pages/page-N.jpg` (next number).
 2. Add entries to `recipes.js` with `page: N`. Format is described at the top of the file.
-3. Add the new photo path to `FILES` in `sw.js` and bump `VERSION` (e.g. `ruchulu-v2`).
+3. Add the new photo path to `FILES` in `sw.js` and bump `VERSION` (e.g. `ruchulu-v3`).
 
 **Transcription rules:** keep her words and quantities and write the other language alongside; never invent amounts ("approx." stays approx.); where only ingredients are written, leave out `steps`; flag unclear words with `'check'` so they show "please check".
 
-Categories: `podulu` పొడులు · `pachallu` పచ్చళ్ళు · `kooralu` కూరలు · `annalu` అన్నాలు · `rottelu` రొట్టెలు.
+New categories go in `CATS` in `index.html` (and an illustration in `art.js`). Current: `podulu` పొడులు · `pachallu` పచ్చళ్ళు · `kooralu` కూరలు · `annalu` అన్నాలు · `rottelu` రొట్టెలు.
